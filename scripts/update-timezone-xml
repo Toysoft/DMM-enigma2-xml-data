@@ -1,0 +1,74 @@
+#!/bin/sh
+#
+# This script does
+# 1.) get required timezones from timezone.xml
+# 2.) convert timezone names to full names with continent or ocean
+# 3.) replace linked timezone names with their current value
+#
+# usage: update-timezeone-xml <filename> <version>
+#
+
+set -e
+
+if [ -z "$2" ]; then
+	echo "usage: $0 <filename> <version>"
+	exit 1
+fi
+
+TIMEZONEXML="$1"
+VERSION="$2"
+
+if [ ! -f "$TIMEZONEXML" ]; then
+	echo "$TIMEZONEXML not found"
+	exit 1
+fi
+
+TMPDIR=`mktemp -d` || exit 1
+
+TZDIR="$TMPDIR/tz${VERSION}"
+if [ ! -d "$TZDIR" ]; then
+	MIRROR="ftp://elsie.nci.nih.gov/pub"
+	TZCODE="tzcode${VERSION}.tar.gz"
+	TZDATA="tzdata${VERSION}.tar.gz"
+	if [ ! -f "$TMPDIR/$TZCODE" ]; then
+		wget $MIRROR/$TZCODE -O $TMPDIR/$TZCODE
+	fi
+	if [ ! -f "$TMPDIR/$TZDATA" ]; then
+		wget $MIRROR/$TZDATA -O $TMPDIR/$TZDATA
+	fi
+	mkdir $TZDIR
+	tar -C $TZDIR -xf $TMPDIR/$TZCODE
+	tar -C $TZDIR -xf $TMPDIR/$TZDATA
+fi
+
+TZINST="$TMPDIR/tz${VERSION}-install"
+ZONEINFO="$TZINST/share/zoneinfo"
+if [ ! -d "$TZINST" ]; then
+	make -C $TZDIR all install TOPDIR="$TZINST" TZDIR="$ZONEINFO"
+fi
+
+for ZONE in `grep '<zone .*/>' $TIMEZONEXML | sed -e 's,.*zone="\(.*\)".*,\1,' | sort -u`; do
+	FILE=`find $ZONEINFO -type f | grep "/$ZONE\$" | sed -e "s,^$ZONEINFO/,," | head -n 1`
+	if [ -z "$FILE" ]; then
+		echo "$ZONE not found"
+	else
+		# special handling for West: could be confused with Australia/West
+		if [ "$ZONE" = "West" ]; then
+			FILE="Brazil/West"
+		fi
+
+		for LINK in `grep "^Link.*$FILE" $TZDIR/backward | awk '{ print $2 }'`; do
+			if [ "$FILE" != "$LINK" ]; then
+				FILE=$LINK
+				break
+			fi
+		done
+
+		if [ "$ZONE" != "$FILE" ]; then
+			sed -i $TIMEZONEXML -e "s,zone=\"$ZONE\",zone=\"$FILE\","
+		fi
+	fi
+done
+
+rm -rf $TMPDIR
+
