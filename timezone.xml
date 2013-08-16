@@ -41,9 +41,9 @@
 	<zone name="(GMT+02:00) Jerusalem" zone="Asia/Jerusalem" />
 	<zone name="(GMT+03:00) Baghdad" zone="Asia/Baghdad" />
 	<zone name="(GMT+03:00) Kuwait, Riyadh" zone="Asia/Riyadh" />
-	<zone name="(GMT+03:00) Moscow, St. Petersburg, Volgograd" zone="Europe/Moscow" />
 	<zone name="(GMT+03:00) Nairobi" zone="Africa/Nairobi" />
 	<zone name="(GMT+03:30) Tehran" zone="Asia/Tehran" />
+	<zone name="(GMT+04:00) Moscow, St. Petersburg, Volgograd" zone="Europe/Moscow" />
 	<zone name="(GMT+04:00) Abu Dhabi, Muscat" zone="Asia/Muscat" />
 	<zone name="(GMT+04:00) Baku, Tbilisi, Yerevan" zone="Asia/Baku" />
 	<zone name="(GMT+04:30) Kabul" zone="Asia/Kabul" />
