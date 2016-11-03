@@ -54,7 +54,7 @@
 	<zone name="(GMT+06:00) Almaty, Novosibirsk" zone="Asia/Almaty" />
 	<zone name="(GMT+06:00) Astana, Dhaka" zone="Asia/Dhaka" />
 	<zone name="(GMT+06:00) Sri Jayawardenepura" zone="Asia/Colombo" />
-	<zone name="(GMT+06:30) Rangoon" zone="Asia/Rangoon" />
+	<zone name="(GMT+06:30) Rangoon" zone="Asia/Yangon" />
 	<zone name="(GMT+07:00) Bangkok, Hanoi, Jakarta" zone="Asia/Bangkok" />
 	<zone name="(GMT+07:00) Krasnoyarsk" zone="Asia/Krasnoyarsk" />
 	<zone name="(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi" zone="Asia/Hong_Kong" />
